@@ -53,10 +53,10 @@ class TestUploader(UploaderTestCase):
   def gen_files(self, lock=False, xattr: bytes = None, boot=True) -> list[Path]:
     f_paths = []
     for t in ["qlog", "rlog", "dcamera.hevc", "fcamera.hevc"]:
-      f_paths.append(self.make_file_with_data(self.seg_dir, t, 1, lock=lock, upload_xattr=xattr))
+      f_paths.append(self.make_file(self.seg_dir, t, 1, lock=lock, upload_xattr=xattr))
 
     if boot:
-      f_paths.append(self.make_file_with_data("boot", f"{self.seg_dir}", 1, lock=lock, upload_xattr=xattr))
+      f_paths.append(self.make_file("boot", f"{self.seg_dir}", 1, lock=lock, upload_xattr=xattr))
     return f_paths
 
   def gen_order(self, seg1: list[int], seg2: list[int], boot=True) -> list[str]:

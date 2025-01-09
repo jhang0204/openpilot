@@ -32,7 +32,7 @@ class TestDeleter(UploaderTestCase):
     self.del_thread.join()
 
   def test_delete(self):
-    f_path = self.make_file_with_data(self.seg_dir, self.f_type, 1)
+    f_path = self.make_file(self.seg_dir, self.f_type, 1)
 
     self.start_thread()
 
@@ -66,32 +66,32 @@ class TestDeleter(UploaderTestCase):
 
   def test_delete_order(self):
     self.assertDeleteOrder([
-      self.make_file_with_data(self.seg_format.format(0), self.f_type),
-      self.make_file_with_data(self.seg_format.format(1), self.f_type),
-      self.make_file_with_data(self.seg_format2.format(0), self.f_type),
+      self.make_file(self.seg_format.format(0), self.f_type),
+      self.make_file(self.seg_format.format(1), self.f_type),
+      self.make_file(self.seg_format2.format(0), self.f_type),
     ])
 
   def test_delete_many_preserved(self):
     self.assertDeleteOrder([
-      self.make_file_with_data(self.seg_format.format(0), self.f_type),
-      self.make_file_with_data(self.seg_format.format(1), self.f_type, preserve_xattr=deleter.PRESERVE_ATTR_VALUE),
-      self.make_file_with_data(self.seg_format.format(2), self.f_type),
+      self.make_file(self.seg_format.format(0), self.f_type),
+      self.make_file(self.seg_format.format(1), self.f_type, preserve_xattr=deleter.PRESERVE_ATTR_VALUE),
+      self.make_file(self.seg_format.format(2), self.f_type),
     ] + [
-      self.make_file_with_data(self.seg_format2.format(i), self.f_type, preserve_xattr=deleter.PRESERVE_ATTR_VALUE)
+      self.make_file(self.seg_format2.format(i), self.f_type, preserve_xattr=deleter.PRESERVE_ATTR_VALUE)
       for i in range(5)
     ])
 
   def test_delete_last(self):
     self.assertDeleteOrder([
-      self.make_file_with_data(self.seg_format.format(1), self.f_type),
-      self.make_file_with_data(self.seg_format2.format(0), self.f_type),
-      self.make_file_with_data(self.seg_format.format(0), self.f_type, preserve_xattr=deleter.PRESERVE_ATTR_VALUE),
-      self.make_file_with_data("boot", self.seg_format[:-4]),
-      self.make_file_with_data("crash", self.seg_format2[:-4]),
+      self.make_file(self.seg_format.format(1), self.f_type),
+      self.make_file(self.seg_format2.format(0), self.f_type),
+      self.make_file(self.seg_format.format(0), self.f_type, preserve_xattr=deleter.PRESERVE_ATTR_VALUE),
+      self.make_file("boot", self.seg_format[:-4]),
+      self.make_file("crash", self.seg_format2[:-4]),
     ])
 
   def test_no_delete_when_available_space(self):
-    f_path = self.make_file_with_data(self.seg_dir, self.f_type)
+    f_path = self.make_file(self.seg_dir, self.f_type)
 
     block_size = 4096
     available = (10 * 1024 * 1024 * 1024) / block_size  # 10GB free
@@ -106,7 +106,7 @@ class TestDeleter(UploaderTestCase):
     assert f_path.exists(), "File deleted with available space"
 
   def test_no_delete_with_lock_file(self):
-    f_path = self.make_file_with_data(self.seg_dir, self.f_type, lock=True)
+    f_path = self.make_file(self.seg_dir, self.f_type, lock=True)
 
     self.start_thread()
     start_time = time.monotonic()
